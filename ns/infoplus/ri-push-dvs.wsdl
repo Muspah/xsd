@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:dynamischevertrekstaat:1"
+	targetNamespace="urn:ns:cdm:reisinformatie:message:dynamischevertrekstaat:1">
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-dvs.wsdl,v 1.5 2011/08/08 12:18:50 rispikap Exp $ -->
+	<wsdl:types>
+		<xsd:schema xmlns:dvs="urn:ns:cdm:reisinformatie:data:rit:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:ns:cdm:reisinformatie:message:dynamischevertrekstaat:1"
+			elementFormDefault="qualified" attributeFormDefault="unqualified"
+			version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-dvs-new.xsd"
+				namespace="urn:ns:cdm:reisinformatie:data:rit:1" />
+			<xsd:element name="PushDynamischeVertrekStaat">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="dvs:ReisInformatieProductDVS"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushDynamischeVertrekStaatRequestMessage">
+		<wsdl:part name="PushDynamischeVertrekStaatRequestPart"
+			element="tns:PushDynamischeVertrekStaat" />
+	</wsdl:message>
+	<wsdl:portType name="PushDynamischeVertrekStaatPortType">
+		<wsdl:operation name="PushDynamischeVertrekStaat">
+			<wsdl:input message="tns:PushDynamischeVertrekStaatRequestMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushDynamischeVertrekStaatJmsBinding"
+		type="tns:PushDynamischeVertrekStaatPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms" />
+		<wsdl:operation name="PushDynamischeVertrekStaat">
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushDynamischeVertrekStaatJmsService">
+		<wsdl:port name="PushDynamischeVertrekStaatJmsPort" binding="tns:PushDynamischeVertrekStaatJmsBinding">
+			<soap:address
+				location="jms:/topic?destination=jms/DVS_CDM_1_XML&amp;connectionFactory=jms/TCF_DVS_CDM&amp;targetService=PushDynamischeVertrekStaatJmsPort" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

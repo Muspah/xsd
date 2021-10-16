@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2014-09-09	1.0	Marcel Sciarone	Leveren trein serviceberichten aan NDOV-->
+<!-- 2015-01-05	1.0.1	Marcel Sciarone	Bij vervallenbericht wordt nu TijdvakID opgegeven -->
+<!-- 2015-10-01	1.0	Marcel Sciarone	Leveren vanuit PPV -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:complexType name="BerichtInhoudType">
+		<xsd:annotation>
+			<xsd:documentation>Alle soorten berichten gebaseerd op hetzelfde type. De XSD dwingt geen lengte af. Afnemende applicaties moeten zelf een strategie hebben om te lange berichten te kunnen weerstaan.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="KopRegel" type="NietLegeStringType"/>
+			<xsd:element name="SubKopRegel" type="NietLegeStringType" minOccurs="0"/>
+			<xsd:element name="BerichtInhoud" type="NietLegeStringType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SIPAdministratieType">
+		<xsd:annotation>
+			<xsd:documentation>De gegevens benodigd voor de identificatie van het bericht met een reisinformatieproduct</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServiceInformatieProductId" type="ServiceInformatieProductIdType"/>
+			<xsd:element name="AbonnementId" type="AbonnementIdType"/>
+			<xsd:element name="ServiceInformatieTijdstip" type="ServiceInformatieTijdstip"/>
+			<xsd:any namespace="##other" processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="StationType">
+		<xsd:annotation>
+			<xsd:documentation>Gedeelte van de spoorweg, bestemd (en ingericht) om treinen te doen stoppen, beginnen, eindigen, inhalen of kruisen en voorzien van ten minste één wissel en tevens bestemd (en ingericht) om reizigers te laten in- of uitstappen en/of goederen aan te nemen en /of af te leveren. Het station datatype bevat elementen met informatie over een station.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StationCode" type="StationCodeType"/>
+			<xsd:element name="Type" type="TypeType"/>
+			<xsd:element name="KorteNaam" type="KorteNaamType"/>
+			<xsd:element name="MiddelNaam" type="MiddelNaamType"/>
+			<xsd:element name="LangeNaam" type="LangeNaamType"/>
+			<xsd:element name="UICCode" type="UICCodeType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TijdvakIdType">
+		<xsd:annotation>
+			<xsd:documentation>Tijdvak waarin het bericht geldig is. 
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Id" type="IdType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TijdvakType">
+		<xsd:annotation>
+			<xsd:documentation>Tijdvak waarin het bericht geldig is. 
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Id" type="IdType"/>
+			<xsd:element name="BeginTijd" type="BeginTijdType"/>
+			<xsd:element name="EindTijd" type="EindTijdType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VrijeTekstBerichtType">
+		<xsd:sequence>
+			<xsd:element name="TijdVak"/>
+			<xsd:element name="Impact"/>
+			<xsd:element name="BestemdVoor"/>
+			<xsd:element name="KortBericht"/>
+			<xsd:element name="MiddelBericht"/>
+			<xsd:element name="LangBericht"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="AbonnementIdType">
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="BeginTijdType">
+		<xsd:restriction base="UTCSecResolutieType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="BerichtIDType">
+		<xsd:annotation>
+			<xsd:documentation>Uniek ID. Deze wordt  aangemaakt om bij parallelle verwerking berichten goed van elkaar te kunnen onderscheiden.
+			Definition: unsignedLong is derived from nonNegativeInteger by setting the value of maxInclusive to be 18446744073709551615. The base type of unsignedLong is nonNegativeInteger. 
+	</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:unsignedLong"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="EindTijdType">
+		<xsd:restriction base="UTCSecResolutieType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="FoutnummerType">
+		<xsd:restriction base="xsd:int">
+			<xsd:annotation>
+				<xsd:documentation>40: RPA niet beschikbaar</xsd:documentation>
+				<xsd:documentation>41: RPA geeft een SOAP Fault</xsd:documentation>
+				<xsd:documentation>50: Redactie niet mogelijk</xsd:documentation>
+				<xsd:documentation>51: Onbekende fout in mediation opgetreden</xsd:documentation>
+				<xsd:documentation>100: Ongeldige input</xsd:documentation>
+			</xsd:annotation>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IdType">
+		<xsd:restriction base="xsd:long"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ImpactType">
+		<xsd:annotation>
+			<xsd:documentation>Geeft de impact van de verstoring aan, mogelijke waarden zijn 1 (licht)-5 (giga). </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger">
+			<xsd:pattern value="[1-5]"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="IndicatieType">
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:enumeration value="N"/>
+			<xsd:enumeration value="J"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="KorteNaamType">
+		<xsd:annotation>
+			<xsd:documentation>Het element KorteNaam bevat een verkorte naam van een station. Maximale lengte is 10 karakters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LangeNaamType">
+		<xsd:annotation>
+			<xsd:documentation>Het element LangeNaam bevat de volledige naam van een station. Maximale lengte is 25 karakters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="25"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MeldingNaamType">
+		<xsd:annotation>
+			<xsd:documentation>De naam van een melding, naamgevingsconventie nog niet duidelijk.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MeldingNummerType">
+		<xsd:annotation>
+			<xsd:documentation>Uniek ID van een VTB Melding.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MeldingVolgNummerType">
+		<xsd:annotation>
+			<xsd:documentation>Uniek volgnummer binnen een  MeldingNummer, waarmee de elkaar opvolgende berichten geidentificeerd kunnen worden.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MiddelNaamType">
+		<xsd:annotation>
+			<xsd:documentation>Het element MiddelNaam bevat een gedeeltelijk ingekorte naam van een station. Maximale lengte is 16 karakters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="16"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NietLegeStringType">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1250"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceInformatieProductIdType">
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceInformatieTijdstip">
+		<xsd:restriction base="UTCSecResolutieType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceInformatieTijdstipType">
+		<xsd:restriction base="UTCSecResolutieType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="StationCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Het element StationCode bevat een unieke afkorting en identificatie van een station.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="6"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TimeStampType">
+		<xsd:restriction base="UTCMilliSecResolutieType"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TypeType">
+		<xsd:annotation>
+			<xsd:documentation>Het element Type geeft een type-aanduiding van een station. 0 = stoptreinstation, 1 = knooppunt stoptreinstation, 2 = Sneltreinstation, 3 = knooppunt sneltreinstation, 4 = Intercitystation, 5 = knooppunt intercitystation, 6 = Megastation, 7 = facultatief station.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1"/>
+			<xsd:enumeration value="0"/>
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="3"/>
+			<xsd:enumeration value="4"/>
+			<xsd:enumeration value="5"/>
+			<xsd:enumeration value="6"/>
+			<xsd:enumeration value="7"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UICCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Het element UICCode bevat een codering voor een station volgens UIC. Maximale lengte is 7 karakters.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="7"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UTCMilliSecResolutieType">
+		<xsd:annotation>
+			<xsd:documentation>Het tijdstip in UTC in het formaat YYYY-MM-DDTHH:MM:SS.SSSZ</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="UTCSecResolutieType">
+		<xsd:annotation>
+			<xsd:documentation>Het tijdstip in UTC in het formaat YYYY-MM-DDTHH:MM:SSZ</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="VersieType">
+		<xsd:annotation>
+			<xsd:documentation>xsd accepteert alle versies.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="VervoerderCodeType">
+		<xsd:restriction base="xsd:nonNegativeInteger"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="VervoerderNaamType">
+		<xsd:restriction base="xsd:normalizedString">
+			<xsd:maxLength value="32"/>
+			<xsd:minLength value="1"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:stationbericht:1" targetNamespace="urn:ns:cdm:reisinformatie:message:stationbericht:1">
+	<wsdl:types>
+		<xsd:schema xmlns:pis="urn:ns:cdm:reisinformatie:data:vi:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ns:cdm:reisinformatie:message:stationbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-vi-stb.xsd" namespace="urn:ns:cdm:reisinformatie:data:vi:1"/>
+			<xsd:element name="PushPatroonInformatieStation">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="pis:ReisInformatieProductPatroonInformatieStation"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushPatroonInformatieStationRequestMessage">
+		<wsdl:part name="PushPatroonInformatieStationRequestPart" element="tns:PushPatroonInformatieStation"/>
+	</wsdl:message>
+	<wsdl:portType name="PushPatroonInformatieStationPortType">
+		<wsdl:operation name="PushPatroonInformatieStation">
+			<wsdl:input message="tns:PushPatroonInformatieStationRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushPatroonInformatieStationJmsBinding" type="tns:PushPatroonInformatieStationPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms"/>
+		<wsdl:operation name="PushPatroonInformatieStation">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushPatroonInformatieStationJmsService">
+		<wsdl:port name="PushPatroonInformatieStationJmsPort" binding="tns:PushPatroonInformatieStationJmsBinding">
+			<soap:address location="jms:/topic?destination=jms/PIS_CDM_1_XML&amp;connectionFactory=jms/TCF_PIS_CDM&amp;targetService=PushPatroonInformatieStationJmsPort"/>
+		</wsdl:port>
+	</wsdl:service>
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-stb.wsdl,v 1.1 2011/10/07 08:28:19 rispikap Exp $ -->
+</wsdl:definitions>

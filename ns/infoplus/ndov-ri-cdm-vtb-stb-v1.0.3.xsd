@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2015-10-01	1.0	Marcel Sciarone	Leveren VrijeTekstBericht Station -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="ndov-ri-cdm-common-vtb-v1.0.2.xsd"/>
+	<xsd:element name="ServiceInformatieProductVrijeTekstBerichtStation" type="ServiceInformatieProductVrijeTekstBerichtStationType"/>
+	<xsd:complexType name="ActueleStationVrijeTekstBerichtenType">
+		<xsd:sequence>
+			<xsd:element name="StationVrijeTekstBericht" type="StationVrijeTekstBerichtType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="BestemdVoorSTBType">
+		<xsd:sequence>
+			<xsd:element name="BeeldStation" type="IndicatieType"/>
+			<xsd:element name="OmroepStation" type="IndicatieType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleStationVrijeTekstBerichtFaultMessageType">
+		<xsd:sequence>
+			<xsd:element name="Foutnummer" type="FoutnummerType"/>
+			<xsd:element name="Omschrijving" type="xsd:string"/>
+			<xsd:element name="GeefActueleStationVrijeTekstBerichtRequestMessage" type="GeefActueleStationVrijeTekstBerichtRequestMessageType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleStationVrijeTekstBerichtRequestMessageType">
+		<xsd:annotation>
+			<xsd:documentation>De vraag voor actuele vertrektijden</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StationCode" type="StationCodeType"/>
+			<xsd:element name="Aanvrager" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Geeft aan wie de aanvrager is (voor statistieken).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer deze vraag is gesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleStationVrijeTekstBerichtResponseMessageType">
+		<xsd:annotation>
+			<xsd:documentation>Dit element bevat een actueel overzicht van alle station vrijetekst berichten voor een bepaald station.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BerichtStatus" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>Status van het antwoord. 10=succesvolle afhandeling, 20=geen actuele reisinformatie beschikbaar. 30=geen reisinformatie beschikbaar.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GeefActueleStationVrijeTekstBerichtRequestMessage" type="GeefActueleStationVrijeTekstBerichtRequestMessageType"/>
+			<xsd:element name="ActueleStationVrijeTekstBerichten" type="ActueleStationVrijeTekstBerichtenType" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceInformatieProductVrijeTekstBerichtStationType">
+		<xsd:sequence>
+			<xsd:element name="SIPAdministratie" type="SIPAdministratieType"/>
+			<xsd:element name="VrijeTekstBerichtStation" type="VrijeTekstBerichtStationType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required"/>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="StationBerichtEigenschappenType">
+		<xsd:sequence>
+			<xsd:element name="Tijdvak" type="TijdvakType"/>
+			<xsd:element name="Impact" type="ImpactType"/>
+			<xsd:element name="BestemdVoor" type="BestemdVoorSTBType"/>
+			<xsd:element name="KortBericht" type="BerichtInhoudType"/>
+			<xsd:element name="MiddelBericht" type="BerichtInhoudType"/>
+			<xsd:element name="LangBericht" type="BerichtInhoudType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VervallenStationBerichtEigenschappenType">
+		<xsd:sequence>
+			<xsd:element name="Tijdvak" type="TijdvakIdType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="StationVrijeTekstBerichtType">
+		<xsd:sequence>
+			<xsd:element name="ServiceInformatieProductId" type="ServiceInformatieProductIdType"/>
+			<xsd:element name="VrijeTekstBerichtStation" type="VrijeTekstBerichtStationType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VrijeTekstBerichtStationType">
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType"/>
+			<xsd:element name="MeldingVolgNummer" type="MeldingVolgNummerType"/>
+			<xsd:element name="MeldingNaam" type="MeldingNaamType"/>
+			<xsd:element name="DoelStation" type="StationType"/>
+			<xsd:element name="WijzigingTypeBericht" type="WijzigingTypeStationBerichtType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="WijzigingTypeStationBerichtType">
+		<xsd:choice>
+			<xsd:element name="Nieuw" type="StationBerichtEigenschappenType"/>
+			<xsd:element name="Gewijzigd" type="StationBerichtEigenschappenType"/>
+			<xsd:element name="Vervallen" type="VervallenStationBerichtEigenschappenType"/>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>

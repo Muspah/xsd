@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2014-09-09	1.0	Marcel Sciarone	Leveren PatroonInformatieStation aan NDOV-->
+<!-- 2014-10-17	1.0.2	Marcel Sciarone	Fouten in Naamgeving, kardinaliteit en optionaliteit t.o.v. InfoPlus opgelost -->
+<!-- 2014-11-27	1.0.3 Marcel Scairone	Probleem Tibco met Situatie/PeriodeKalander opgelost. -->
+<!-- 2015-10-02	1.0.4	Marcel Sciarone	Levering vanuit PPV -->
+<wsdl:definitions xmlns:pis="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:messages:stationbericht:1" xmlns:ns="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:data:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:this="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:messages:stationbericht:1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="STBPushExport_InfoPlusPISInterfaceHttp_Service" targetNamespace="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:messages:stationbericht:1">
+	<wsdl:types>
+		<xs:schema xmlns:tot="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:data:1" xmlns:this="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:messages:stationbericht:1" targetNamespace="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:messages:stationbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xs:import namespace="urn:ndov:cdm:treinverstoringsinformatie:reisinformatie:data:1" schemaLocation="ndov-ri-cdm-vi-stb-v1.0.4.xsd"/>
+			<xs:element name="PutReisInformatieBoodschapIn">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tot:ReisInformatieProductPatroonInformatieStation"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PutReisInformatieBoodschapOut">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="pis:ReisInformatieProductPISResponse"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ReisInformatieProductPISResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Success">
+							<xs:annotation>
+								<xs:documentation>Geeft aan of het bericht succesvol (OK) of niet succesvol (NOK) is aangekomen op het afnemende systeem</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="OK"/>
+									<xs:enumeration value="NOK"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ErrorCode" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>In geval van een foutsituatie (Success=NOK) vult het afnemende systeem dit veld met een unieke foutcode.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ErrorMessage" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>In geval van een foutsituatie (Success=NOK) vult het afnemende systeem dit veld met een relevante tekstuele omschrijving.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ReisInformatieProductPISHeaderInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ESBTimeStamp" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="PutReisInformatieBoodschapRequest">
+		<wsdl:part name="PutReisInformatieBoodschapIn" element="pis:PutReisInformatieBoodschapIn"/>
+	</wsdl:message>
+	<wsdl:message name="PutReisInformatieBoodschapResponse">
+		<wsdl:part name="PutReisInformatieBoodschapOut" element="pis:PutReisInformatieBoodschapOut"/>
+	</wsdl:message>
+	<wsdl:message name="ReisInformatieProductPISHeaderInfo">
+		<wsdl:part name="Info" element="pis:ReisInformatieProductPISHeaderInfo"/>
+	</wsdl:message>
+	<wsdl:portType name="InfoPlusPISInterface">
+		<wsdl:operation name="PutReisInformatieBoodschap">
+			<wsdl:input message="pis:PutReisInformatieBoodschapRequest"/>
+			<wsdl:output message="pis:PutReisInformatieBoodschapResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PISPushExport_InfoPlusPISInterfaceHttpBinding" type="this:InfoPlusPISInterface">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="PutReisInformatieBoodschap">
+			<soap:operation soapAction="urn:#PutReisInformatieBoodschap"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="pis:ReisInformatieProductPISHeaderInfo" part="Info" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PISPushExport_InfoPlusPISInterfaceHttpService">
+		<wsdl:port name="PISPushExport_InfoPlusPISInterfaceHttpPort" binding="this:PISPushExport_InfoPlusPISInterfaceHttpBinding">
+			<soap:address location="http:// 172.25.226.1/rcv-ns1-01/pis.asmx"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

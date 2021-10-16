@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:ritinfo:2"
+	targetNamespace="urn:ns:cdm:reisinformatie:message:ritinfo:2">
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-rit.wsdl,v 1.5 2011/08/08 12:18:50 rispikap Exp $ -->
+	<wsdl:types>
+		<xsd:schema xmlns:rit="urn:ns:cdm:reisinformatie:data:rit:2" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:ns:cdm:reisinformatie:message:ritinfo:2"
+			elementFormDefault="qualified" attributeFormDefault="unqualified"
+			version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-rit-v2.xsd"
+				namespace="urn:ns:cdm:reisinformatie:data:rit:2" />
+			<xsd:element name="PushRITInfo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="rit:ReisInformatieProductRitInfo"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushRITInfoRequestMessage">
+		<wsdl:part name="PushRITInfoRequestPart" element="tns:PushRITInfo" />
+	</wsdl:message>
+	<wsdl:portType name="PushRITInfoPortType">
+		<wsdl:operation name="PushRITInfo">
+			<wsdl:input message="tns:PushRITInfoRequestMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushRITInfoJmsBinding" type="tns:PushRITInfoPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms" />
+		<wsdl:operation name="PushRITInfo">
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushRITInfoJmsService">
+		<wsdl:port name="PushRITInfoJmsPort" binding="tns:PushRITInfoJmsBinding">
+			<soap:address
+				location="jms:/topic?destination=jms/RIT_CDM_1_XML&amp;connectionFactory=jms/TCF_RIT_CDM&amp;targetService=PushRITInfoJmsPort" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

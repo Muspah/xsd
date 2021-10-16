@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:ns:cdm:reisinformatie:message:dynamischeaankomststaat:1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:dynamischeaankomststaat:1">
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-das.wsdl,v 1.5 2011/08/08 12:18:50 rispikap Exp $ -->
+	<wsdl:types>
+		<xsd:schema xmlns:das="urn:ns:cdm:reisinformatie:data:rit:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="urn:ns:cdm:reisinformatie:message:dynamischeaankomststaat:1"
+			elementFormDefault="qualified" attributeFormDefault="unqualified"
+			version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-das-new.xsd"
+				namespace="urn:ns:cdm:reisinformatie:data:rit:1" />
+			<xsd:element name="PushDynamischeAankomstStaat">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="das:ReisInformatieProductDAS" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushDynamischeAankomstStaatRequestMessage">
+		<wsdl:part name="PushDynamischeAankomstStaatRequestPart"
+			element="tns:PushDynamischeAankomstStaat" />
+	</wsdl:message>
+	<wsdl:portType name="PushDynamischeAankomstStaatPortType">
+		<wsdl:operation name="PushDynamischeAankomstStaat">
+			<wsdl:input message="tns:PushDynamischeAankomstStaatRequestMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushDynamischeAankomstStaatJmsBinding"
+		type="tns:PushDynamischeAankomstStaatPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms" />
+		<wsdl:operation name="PushDynamischeAankomstStaat">
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushDynamischeAankomstStaatJmsService">
+		<wsdl:port name="PushDynamischeAankomstStaatJmsPort"
+			binding="tns:PushDynamischeAankomstStaatJmsBinding">
+			<soap:address
+				location="jms:/topic?destination=jms/DAS_CDM_1_XML&amp;connectionFactory=jms/TCF_DAS_CDM&amp;targetService=PushDynamischeAankomstStaatJmsPort" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

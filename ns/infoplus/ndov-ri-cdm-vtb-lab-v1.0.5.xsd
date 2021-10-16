@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2014-09-09	1.0	Marcel Sciarone	Leveren VrijetekstBerichtLandelijk aan NDOV-->
+<!-- 2014-10-17	1.0.1	Marcel Sciarone	Fouten in Naamgeving, kardinaliteit en optionaliteit t.o.v. InfoPlus opgelost -->
+<!-- 2015-01-05	1.0.2	Marcel Sciarone	Bij vervallenbericht station wordt nu TijdvakID opgegeven -->
+<!-- 2015-10-01	1.0.3	Marcel Sciarone	Leveren vanuit PPV -->
+<!-- 2016-04-29	1.0.4	Marcel Sciarone	Categorie en TaalCode opgenomen. -->
+<!-- 2016-06-01	1.0.5	Marcel Sciarone	BerichtCategorieCode heet nu BerichtCategorieCodeType en is gewijzigd van integer naar string -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="ndov-ri-cdm-common-vtb-v1.0.4.xsd"/>
+	<xsd:element name="ServiceInformatieProductVrijeTekstBerichtLandelijk" type="ServiceInformatieProductVrijeTekstBerichtLandelijkType"/>
+	<xsd:complexType name="ActueleLandelijkVrijeTekstBerichtenType">
+		<xsd:sequence>
+			<xsd:element name="LandelijkVrijeTekstBericht" type="LandelijkVrijeTekstBerichtType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="BestemdVoorLABType">
+		<xsd:sequence>
+			<xsd:element name="Derden" type="IndicatieType"/>
+			<xsd:element name="Teletekst" type="TeletekstType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleLandelijkVrijeTekstBerichtFaultMessageType">
+		<xsd:sequence>
+			<xsd:element name="Foutnummer" type="FoutnummerType"/>
+			<xsd:element name="Omschrijving" type="xsd:string"/>
+			<xsd:element name="GeefActueleLandelijkVrijeTekstBerichtRequestMessage" type="GeefActueleLandelijkVrijeTekstBerichtRequestMessageType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleLandelijkVrijeTekstBerichtRequestMessageType">
+		<xsd:annotation>
+			<xsd:documentation>De vraag voor actuele vertrektijden</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType" minOccurs="0"/>
+			<xsd:element name="Aanvrager" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Geeft aan wie de aanvrager is (voor statistieken).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer deze vraag is gesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleLandelijkVrijeTekstBerichtResponseMessageType">
+		<xsd:annotation>
+			<xsd:documentation>Dit element bevat een actueel overzicht van alle landelijke vrijetekst berichten.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BerichtStatus" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>Status van het antwoord. 10=succesvolle afhandeling, 20=geen actuele reisinformatie beschikbaar. 30=geen reisinformatie beschikbaar.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GeefActueleLandelijkVrijeTekstBerichtRequestMessage" type="GeefActueleLandelijkVrijeTekstBerichtRequestMessageType"/>
+			<xsd:element name="ActueleLandelijkVrijeTekstBerichten" type="ActueleLandelijkVrijeTekstBerichtenType" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="LandelijkBerichtEigenschappenType">
+		<xsd:sequence>
+			<xsd:element name="Tijdvak" type="TijdvakType" maxOccurs="unbounded"/>
+			<xsd:element name="Impact" type="ImpactType"/>
+			<xsd:element name="BestemdVoor" type="BestemdVoorLABType"/>
+			<xsd:element name="Categorie" type="CategorieType" minOccurs="0"/>
+			<xsd:element name="TaalCode" type="TaalCodeType" minOccurs="0"/>
+			<xsd:element name="KortBericht" type="BerichtInhoudType"/>
+			<xsd:element name="MiddelBericht" type="BerichtInhoudType"/>
+			<xsd:element name="LangBericht" type="BerichtInhoudType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LandelijkVrijeTekstBerichtType">
+		<xsd:sequence>
+			<xsd:element name="ServiceInformatieProductId" type="ServiceInformatieProductIdType"/>
+			<xsd:element name="VrijeTekstBerichtLandelijk" type="VrijeTekstBerichtLandelijkType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceInformatieProductVrijeTekstBerichtLandelijkType">
+		<xsd:sequence>
+			<xsd:element name="SIPAdministratie" type="SIPAdministratieType"/>
+			<xsd:element name="VrijeTekstBerichtLandelijk" type="VrijeTekstBerichtLandelijkType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required"/>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="TeletekstType">
+		<xsd:sequence>
+			<xsd:element name="CalamiteitenNL" type="IndicatieType"/>
+			<xsd:element name="Internationaal" type="IndicatieType"/>
+			<xsd:element name="ExtraTreinen" type="IndicatieType"/>
+			<xsd:element name="Werkzaamheden" type="IndicatieType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VrijeTekstBerichtLandelijkType">
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType"/>
+			<xsd:element name="MeldingVolgNummer" type="MeldingVolgNummerType"/>
+			<xsd:element name="MeldingNaam" type="MeldingNaamType"/>
+			<xsd:element name="WijzigingTypeBericht" type="WijzigingTypeLandelijkBerichtType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="WijzigingTypeLandelijkBerichtType">
+		<xsd:choice>
+			<xsd:element name="Nieuw" type="LandelijkBerichtEigenschappenType"/>
+			<xsd:element name="Gewijzigd" type="LandelijkBerichtEigenschappenType"/>
+			<xsd:element name="Vervallen" type="LegeStringType"/>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>

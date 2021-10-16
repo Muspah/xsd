@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:landelijkbericht:1" targetNamespace="urn:ns:cdm:reisinformatie:message:landelijkbericht:1">
+	<wsdl:types>
+		<xsd:schema xmlns:pil="urn:ns:cdm:reisinformatie:data:vi:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ns:cdm:reisinformatie:message:landelijkbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-vi-lab.xsd" namespace="urn:ns:cdm:reisinformatie:data:vi:1"/>
+			<xsd:element name="PushPatroonInformatieLandelijk">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="pil:ReisInformatieProductPatroonInformatieLandelijk"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushPatroonInformatieLandelijkRequestMessage">
+		<wsdl:part name="PushPatroonInformatieLandelijkRequestPart" element="tns:PushPatroonInformatieLandelijk"/>
+	</wsdl:message>
+	<wsdl:portType name="PushPatroonInformatieLandelijkPortType">
+		<wsdl:operation name="PushPatroonInformatieLandelijk">
+			<wsdl:input message="tns:PushPatroonInformatieLandelijkRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushPatroonInformatieLandelijkJmsBinding" type="tns:PushPatroonInformatieLandelijkPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms"/>
+		<wsdl:operation name="PushPatroonInformatieLandelijk">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushPatroonInformatieLandelijkJmsService">
+		<wsdl:port name="PushPatroonInformatieLandelijkJmsPort" binding="tns:PushPatroonInformatieLandelijkJmsBinding">
+			<soap:address location="jms:/topic?destination=jms/PIL_CDM_1_XML&amp;connectionFactory=jms/TCF_PIL_CDM&amp;targetService=PushPatroonInformatieLandelijkJmsPort"/>
+		</wsdl:port>
+	</wsdl:service>
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-rit.wsdl,v 1.5 2011/08/08 12:18:50 rispikap Exp $ -->
+</wsdl:definitions>

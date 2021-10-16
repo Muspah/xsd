@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:landelijkvrijetekstbericht:1" xmlns:ns="urn:ns:cdm:reisinformatie:data:vtb:1" targetNamespace="urn:ns:cdm:reisinformatie:message:landelijkvrijetekstbericht:1">
+	<wsdl:types>
+		<xsd:schema xmlns:vtl="urn:ns:cdm:reisinformatie:data:vtb:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ns:cdm:reisinformatie:message:landelijkvrijetekstbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-vtb-lab.xsd" namespace="urn:ns:cdm:reisinformatie:data:vtb:1"/>
+			<xsd:element name="PushVrijeTekstBerichtLandelijk">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="vtl:ServiceInformatieProductVrijeTekstBerichtLandelijk"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushVrijeTekstBerichtLandelijkRequestMessage">
+		<wsdl:part name="PushVrijeTekstBerichtLandelijkRequestPart" element="tns:PushVrijeTekstBerichtLandelijk"/>
+	</wsdl:message>
+	<wsdl:portType name="PushVrijeTekstBerichtLandelijkPortType">
+		<wsdl:operation name="PushVrijeTekstBerichtLandelijk">
+			<wsdl:input message="tns:PushVrijeTekstBerichtLandelijkRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushVrijeTekstBerichtLandelijkJmsBinding" type="tns:PushVrijeTekstBerichtLandelijkPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms"/>
+		<wsdl:operation name="PushVrijeTekstBerichtLandelijk">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushVrijeTekstBerichtLandelijkJmsService">
+		<wsdl:port name="PushVrijeTekstBerichtLandelijkJmsPort" binding="tns:PushVrijeTekstBerichtLandelijkJmsBinding">
+			<soap:address location="jms:/topic?destination=jms/VTL_CDM_1_XML&amp;connectionFactory=jms/TCF_VTL_CDM&amp;targetService=PushVrijeTekstBerichtLandelijkJmsPort"/>
+		</wsdl:port>
+	</wsdl:service>
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec/ri-push-vtblab.wsdl,v 1.1 2011/10/07 08:28:19 rispikap Exp $ -->
+</wsdl:definitions>

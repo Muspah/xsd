@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2016-06-07	1.0	Marcel Sciarone	VrijeTekstBerichten Treinen-->
+<!-- $Header: $ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="urn:ns:cdm:reisinformatie:message:treinvrijetekstbericht:1" xmlns:ns="urn:ns:cdm:reisinformatie:data:vtb:1" targetNamespace="urn:ns:cdm:reisinformatie:message:treinvrijetekstbericht:1">
+	<wsdl:types>
+		<xsd:schema xmlns:vtt="urn:ns:cdm:reisinformatie:data:vtb:1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:ns:cdm:reisinformatie:message:treinvrijetekstbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+			<xsd:import schemaLocation="../../datatypes/schema/ri-cdm-vtb-trb.xsd" namespace="urn:ns:cdm:reisinformatie:data:vtb:1"/>
+			<xsd:element name="PushVrijeTekstBerichtTrein">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element ref="vtt:ServiceInformatieProductVrijeTekstBerichtTrein"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="PushVrijeTekstBerichtTreinRequestMessage">
+		<wsdl:part name="PushVrijeTekstBerichtTreinRequestPart" element="tns:PushVrijeTekstBerichtTrein"/>
+	</wsdl:message>
+	<wsdl:portType name="PushVrijeTekstBerichtTreinPortType">
+		<wsdl:operation name="PushVrijeTekstBerichtTrein">
+			<wsdl:input message="tns:PushVrijeTekstBerichtTreinRequestMessage"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushVrijeTekstBerichtTreinJmsBinding" type="tns:PushVrijeTekstBerichtTreinPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/jms"/>
+		<wsdl:operation name="PushVrijeTekstBerichtTrein">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushVrijeTekstBerichtTreinJmsService">
+		<wsdl:port name="PushVrijeTekstBerichtTreinJmsPort" binding="tns:PushVrijeTekstBerichtTreinJmsBinding">
+			<soap:address location="jms:/topic?destination=jms/VTT_CDM_1_XML&amp;connectionFactory=jms/TCF_VTT_CDM&amp;targetService=PushVrijeTekstBerichtTreinJmsPort"/>
+		</wsdl:port>
+	</wsdl:service>
+	<!-- $Header: /apps/cvs/ara/RPANEW/rpa_spec3/ri-push-vtb-stb.wsdl,v 1.1 2014/10/21 12:34:27 rispikap Exp $ -->
+</wsdl:definitions>

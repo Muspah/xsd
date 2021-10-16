@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2016-06-06	1.0.0	Marcel Sciarone	Leveren VrijeTekstBericht Trein -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:include schemaLocation="ndov-ri-cdm-common-vtb-v1.0.5.xsd"/>
+	<!-- $Header -->
+	<xsd:element name="ServiceInformatieProductVrijeTekstBerichtTrein" type="ServiceInformatieProductVrijeTekstBerichtTreinType">
+		<xsd:annotation>
+			<xsd:documentation>Vrije tekstbericht. Per treinserie/richting of voor een enkele trein een bericht. </xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="ActueleReikWijdteTreinenVrijeTekstBerichtType">
+		<xsd:annotation>
+			<xsd:documentation>Geeft de actuele reikwijdte treinen weer van een vrije tekst bericht</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType"/>
+			<xsd:element name="ReikWijdteTrein" type="ReikWijdteTreinVTBType" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="ActueleTreinVrijeTekstBerichtenType">
+		<xsd:annotation>
+			<xsd:documentation>Geeft de actuele vrije tekst berichten weer.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TreinVrijeTekstBericht" type="TreinVrijeTekstBerichtType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="BestemdVoorTRBType">
+		<xsd:annotation>
+			<xsd:documentation>Bestemd voor Omroep of Beeld</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BeeldTrein" type="IndicatieType"/>
+			<xsd:element name="OmroepTrein" type="IndicatieType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="DoelTreinenType">
+		<xsd:sequence>
+			<xsd:element name="VanTreinNummer" type="TreinNummerType"/>
+			<xsd:element name="TotMetTreinNummer" type="TreinNummerType"/>
+			<xsd:element name="Selectie" type="TreinNummerRichtingType"/>
+			<xsd:element name="RouteDeel" type="RouteDeelType" minOccurs="0"/>
+			<xsd:element name="VervoerderCode" type="VervoerderCodeType"/>
+			<xsd:element name="VervoerderNaam" type="VervoerderNaamType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleReikWijdteTreinenVrijeTekstBerichtFaultMessageType">
+		<xsd:annotation>
+			<xsd:documentation>De vraag voor actuele reikwijdte treinen van een bepaald vrije tekst bericht.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Foutnummer" type="FoutnummerType"/>
+			<xsd:element name="Omschrijving" type="xsd:string"/>
+			<xsd:element name="GeefActueleReikWijdteTreinenVrijeTekstBerichtRequestMessage" type="GeefActueleReikWijdteTreinenVrijeTekstBerichtRequestMessageType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleReikWijdteTreinenVrijeTekstBerichtRequestMessageType">
+		<xsd:annotation>
+			<xsd:documentation>De vraag voor actuele vrije tekst berichten.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType"/>
+			<xsd:element name="Aanvrager" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Geeft aan wie de aanvrager is (voor statistieken).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer deze vraag is gesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleReikWijdteTreinenVrijeTekstBerichtResponseMessageType">
+		<xsd:annotation>
+			<xsd:documentation>Dit element bevat een actueel overzicht van alle vrije tekst berichten voor een bepaalde trein.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BerichtStatus" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>Status van het antwoord. 10=succesvolle afhandeling, 20=geen actuele reisinformatie beschikbaar. 30=geen reisinformatie beschikbaar.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GeefActueleReikWijdteTreinenVrijeTekstBerichtRequestMessage" type="GeefActueleReikWijdteTreinenVrijeTekstBerichtRequestMessageType"/>
+			<xsd:element name="ActueleReikWijdteTreinenVrijeTekstBericht" type="ActueleReikWijdteTreinenVrijeTekstBerichtType" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleTreinVrijeTekstBerichtFaultMessageType">
+		<xsd:sequence>
+			<xsd:element name="Foutnummer" type="FoutnummerType"/>
+			<xsd:element name="Omschrijving" type="xsd:string"/>
+			<xsd:element name="GeefActueleTreinVrijeTekstBerichtRequestMessage" type="GeefActueleTreinVrijeTekstBerichtRequestMessageType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleTreinVrijeTekstBerichtRequestMessageType">
+		<xsd:annotation>
+			<xsd:documentation>De vraag voor actuele vrije tekst berichten  voor een bepaalde trein.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TreinNummer" type="TreinNummerType"/>
+			<xsd:element name="Aanvrager" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation>Geeft aan wie de aanvrager is (voor statistieken).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer deze vraag is gesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="GeefActueleTreinVrijeTekstBerichtResponseMessageType">
+		<xsd:annotation>
+			<xsd:documentation>Dit element bevat een actueel overzicht van alle vrije tekst berichten voor een bepaalde trein.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BerichtStatus" type="xsd:int">
+				<xsd:annotation>
+					<xsd:documentation>Status van het antwoord. 10=succesvolle afhandeling, 20=geen actuele reisinformatie beschikbaar. 30=geen reisinformatie beschikbaar.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GeefActueleTreinVrijeTekstBerichtRequestMessage" type="GeefActueleTreinVrijeTekstBerichtRequestMessageType"/>
+			<xsd:element name="ActueleTreinVrijeTekstBerichten" type="ActueleTreinVrijeTekstBerichtenType" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required">
+			<xsd:annotation>
+				<xsd:documentation>Geeft de datum en tijd weer  wanneer het antwoord is samengesteld.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="ReikWijdteTreinVTBType">
+		<xsd:sequence>
+			<xsd:element name="MeldingVolgNummer" type="MeldingVolgNummerType"/>
+			<xsd:element name="DoelTreinen" type="DoelTreinenType"/>
+			<xsd:element name="RouteDeel" type="RouteDeelType" minOccurs="0"/>
+			<xsd:element name="ServiceInformatieProductId" type="ServiceInformatieProductIdType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RouteDeelType">
+		<xsd:sequence>
+			<xsd:element name="VanStation" type="StationType"/>
+			<xsd:sequence minOccurs="0">
+				<xsd:element name="NaarStation" type="StationType"/>
+				<xsd:element name="ViaStation" type="StationType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceInformatieProductVrijeTekstBerichtTreinType">
+		<xsd:sequence>
+			<xsd:element name="SIPAdministratie" type="SIPAdministratieType"/>
+			<xsd:element name="VrijeTekstBerichtTrein" type="VrijeTekstBerichtTreinType"/>
+		</xsd:sequence>
+		<xsd:attribute name="TimeStamp" type="TimeStampType" use="required"/>
+		<xsd:attribute name="Versie" type="VersieType" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="TreinBerichtEigenschappenType">
+		<xsd:sequence>
+			<xsd:element name="Tijdvak" type="TijdvakType" maxOccurs="unbounded"/>
+			<xsd:element name="Impact" type="ImpactType"/>
+			<xsd:element name="BestemdVoor" type="BestemdVoorTRBType"/>
+			<xsd:element name="Categorie" type="CategorieType"/>
+			<xsd:element name="TaalCode" type="TaalCodeType"/>
+			<xsd:element name="KortBericht" type="BerichtInhoudType"/>
+			<xsd:element name="MiddelBericht" type="BerichtInhoudType"/>
+			<xsd:element name="LangBericht" type="BerichtInhoudType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TreinVrijeTekstBerichtType">
+		<xsd:sequence>
+			<xsd:element name="ServiceInformatieProductId" type="ServiceInformatieProductIdType"/>
+			<xsd:element name="VrijeTekstBerichtTrein" type="VrijeTekstBerichtTreinType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VervallenTreinBerichtEigenschappenType"/>
+	<xsd:complexType name="VrijeTekstBerichtTreinType">
+		<xsd:sequence>
+			<xsd:element name="MeldingNummer" type="MeldingNummerType"/>
+			<xsd:element name="MeldingVolgNummer" type="MeldingVolgNummerType"/>
+			<xsd:element name="MeldingNaam" type="MeldingNaamType"/>
+			<xsd:element name="DoelTreinen" type="DoelTreinenType"/>
+			<xsd:element name="WijzigingTypeBericht" type="WijzigingTypeTreinBerichtType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="WijzigingTypeTreinBerichtType">
+		<xsd:choice>
+			<xsd:element name="Nieuw" type="TreinBerichtEigenschappenType"/>
+			<xsd:element name="Gewijzigd" type="TreinBerichtEigenschappenType"/>
+			<xsd:element name="Vervallen" type="LegeStringType"/>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>

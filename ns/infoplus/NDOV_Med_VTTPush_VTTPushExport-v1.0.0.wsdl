@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2016-06-06	1.0	Marcel Sciarone	Leveren VrijeTekstberichtTrein aan NDOV-->
+<wsdl:definitions xmlns:vtt="urn:ndov:cdm:treinserviceinformatie:reisinformatie:messages:treinbericht:1" xmlns:ns="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:this="urn:ndov:cdm:treinserviceinformatie:reisinformatie:messages:treinbericht:1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="VTTPushExport_InfoPlusVTTInterfaceHttp_Service" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:messages:treinbericht:1">
+	<wsdl:types>
+		<xs:schema xmlns:tot="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" xmlns:this="urn:ndov:cdm:treinserviceinformatie:reisinformatie:messages:treinbericht:1" targetNamespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:messages:treinbericht:1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xs:import namespace="urn:ndov:cdm:treinserviceinformatie:reisinformatie:data:1" schemaLocation="ndov-ri-cdm-vtb-trb-v1.0.0.xsd"/>
+			<xs:element name="PutReisInformatieBoodschapIn">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="tot:ServiceInformatieProductVrijeTekstBerichtTrein"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PutReisInformatieBoodschapOut">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element ref="vtt:ReisInformatieProductVTTResponse"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ReisInformatieProductVTTResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Success">
+							<xs:annotation>
+								<xs:documentation>Geeft aan of het bericht succesvol (OK) of niet succesvol (NOK) is aangekomen op het afnemende systeem</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="OK"/>
+									<xs:enumeration value="NOK"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ErrorCode" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>In geval van een foutsituatie (Success=NOK) vult het afnemende systeem dit veld met een unieke foutcode.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ErrorMessage" type="xs:string" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>In geval van een foutsituatie (Success=NOK) vult het afnemende systeem dit veld met een relevante tekstuele omschrijving.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ReisInformatieProductVTTHeaderInfo">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ESBTimeStamp" type="xs:dateTime"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="PutReisInformatieBoodschapRequest">
+		<wsdl:part name="PutReisInformatieBoodschapIn" element="vtt:PutReisInformatieBoodschapIn"/>
+	</wsdl:message>
+	<wsdl:message name="PutReisInformatieBoodschapResponse">
+		<wsdl:part name="PutReisInformatieBoodschapOut" element="vtt:PutReisInformatieBoodschapOut"/>
+	</wsdl:message>
+	<wsdl:message name="ReisInformatieProductVTTHeaderInfo">
+		<wsdl:part name="Info" element="vtt:ReisInformatieProductVTTHeaderInfo"/>
+	</wsdl:message>
+	<wsdl:portType name="InfoPlusVTTInterface">
+		<wsdl:operation name="PutReisInformatieBoodschap">
+			<wsdl:input message="vtt:PutReisInformatieBoodschapRequest"/>
+			<wsdl:output message="vtt:PutReisInformatieBoodschapResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="VTTPushExport_InfoPlusVTTInterfaceHttpBinding" type="this:InfoPlusVTTInterface">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="PutReisInformatieBoodschap">
+			<soap:operation soapAction="urn:#PutReisInformatieBoodschap"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+				<soap:header message="vtt:ReisInformatieProductVTTHeaderInfo" part="Info" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="VTTPushExport_InfoPlusVTTInterfaceHttpService">
+		<wsdl:port name="VTTPushExport_InfoPlusVTTInterfaceHttpPort" binding="this:VTTPushExport_InfoPlusVTTInterfaceHttpBinding">
+			<soap:address location="http:// 172.25.226.1/rcv-ns1-01/vtt.asmx"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
