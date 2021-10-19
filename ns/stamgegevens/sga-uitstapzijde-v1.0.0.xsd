@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 2021-10-19 1.0.0 Generated based on the (incomplete) Uitstapzijde docs released by NS -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns_sga_alg="http://schemas.ns.nl/ARA/Stamgegevens/Algemeen" 
+    targetNamespace="http://schemas.ns.nl/ARA/Stamgegevens/Algemeen" elementFormDefault="qualified" attributeFormDefault="qualified">
+    <xsd:element name="StamgegevensInput">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="UitstapZijdeInput" type="ns_sga_alg:UitstapZijdeInputType" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="IngangsMoment" type="ns_sga_alg:IngangsMomentType" use="required"/>
+            <xsd:attribute name="Versie" type="ns_sga_alg:SGAVersieType" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="UitstapZijdeInputType">
+        <xsd:sequence>
+            <xsd:element name="UitstapStation" type="ns_sga_alg:UitstapStationType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="UitstapStationType">
+        <xsd:sequence>
+            <xsd:element name="StationCode" type="ns_sga_alg:StationCodeType"/>
+            <xsd:element name="InrijdRichting" type="ns_sga_alg:InrijdRichtingType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="StationCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Het station waarvoor de uitstapzijde van toepassing is. Een stationsnaam kan maar eenmaal voorkomen. 
+                De combinatie van Inrijdrichting en Spoor is per Station uniek.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="6"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="InrijdRichtingType">
+        <xsd:annotation>
+            <xsd:documentation>De richting waar een trein vandaan komt bij het naderen van een station. Hier wordt het
+                achterliggende station (waarvan eerder vertrokken is/of gepasseerd is) vastgelegd. Een station kan
+                meerdere Inrijdrichtingen hebben. De combinatie Spoor en Station is per Inrijdrichting uniek.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="StationCode" type="ns_sga_alg:StationCodeType"/>
+            <xsd:element name="SpoorUitstapZijde" type="ns_sga_alg:SpoorUitstapZijdeType" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="SpoorUitstapZijdeType">
+        <xsd:sequence>
+            <xsd:element name="Spoor" type="ns_sga_alg:SpoorType"/>
+            <xsd:element name="UitstapZijde" type="ns_sga_alg:UitstapZijdeType"/>
+            <xsd:element name="IngangsDatum" type="ns_sga_alg:IngangsDatumType"/>
+            <xsd:element name="EindDatum" type="ns_sga_alg:EindDatumType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="IngangsMomentType">
+        <xsd:restriction base="xsd:dateTime"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="IngangsDatumType">
+        <xsd:annotation>
+            <xsd:documentation>De datum waarop de uitstapinformatie geldig is.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:date"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="EindDatumType">
+        <xsd:annotation>
+            <xsd:documentation>De datum waarop de uitstapinformatie - niet meer –
+                geldig is. Veld komt alleen voor indien het gevuld is. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:date"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="SGAVersieType">
+        <xsd:annotation>
+            <xsd:documentation>SGA applicatie versie.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="SpoorType">
+        <xsd:annotation>
+            <xsd:documentation>Het spoor waarvoor de uitstapzijde informatie geldig is. 
+                Een station kan meerdere sporen hebben. De combinatie van Station en 
+                Inrijdrichting is per Spoor uniek.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="UitstapZijdeType">
+        <xsd:annotation>
+            <xsd:documentation>Hierin komen alleen de waarde Links of Rechts voor.
+                De waarde geeft aan, bij het naderen van het station,
+                aan welke zijde van de trein uitgestapt moet worden.
+                De uitstapzijde is aangegeven in de rijrichting van de
+                trein.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:normalizedString">
+            <xsd:enumeration value="Links"/>
+            <xsd:enumeration value="Rechts"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>
