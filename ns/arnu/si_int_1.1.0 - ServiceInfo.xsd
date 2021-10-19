@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 (http://www.altova.com) by Piet Kappen (EDS International BV) -->
+<!-- $Id: ServiceInfo.xsd,v 1.1 2012/05/24 12:02:42 rispikap Exp $ -->
+<!-- edited with XMLSPY v2004 rel. 4 U (http://www.xmlspy.com) by Jeroen Tekelenburg (EDS- Utrecht) -->
+<xs:schema xmlns="http://www.tt-solutions.nl/schemas/NS/RTI/1.1/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.tt-solutions.nl/schemas/NS/RTI/1.1/" elementFormDefault="unqualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="ServiceInfoKind">
+		<xs:annotation>
+			<xs:documentation>Kind of services</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Normal-Service"/>
+			<xs:enumeration value="New-Service"/>
+			<xs:enumeration value="Cancelled-Service"/>
+			<xs:enumeration value="Diverted-Service"/>
+			<xs:enumeration value="Extended-Service"/>
+			<xs:enumeration value="ScheduleChanged-Service"/>
+			<xs:enumeration value="Split-Service"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ServiceInfoStopKind">
+		<xs:annotation>
+			<xs:documentation>Kind of stop</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Cancelled-Stop"/>
+			<xs:enumeration value="Diverted-Stop"/>
+			<xs:enumeration value="Split-Stop"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReturnValueKind">
+		<xs:annotation>
+			<xs:documentation>Kind of return values</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Return-OK"/>
+			<xs:enumeration value="Return-Error-Resend"/>
+			<xs:enumeration value="Return-Error-DoNotResend"/>
+			<xs:enumeration value="Return-Restart"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SearchTypeKind">
+		<xs:annotation>
+			<xs:documentation>Do we want only the static serviceinfo or the real time</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="STATIC"/>
+			<xs:enumeration value="REALTIME"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ServiceInfoServiceList">
+		<xs:annotation>
+			<xs:documentation>List of changed services</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ServiceInfo" type="ServiceInfoServiceType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>information of changed service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Initial" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfoServiceJitList">
+		<xs:annotation>
+			<xs:documentation>List of changed services</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ServiceInfo" type="ServiceInfoServiceJitType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>information of changed service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Initial" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfoServiceType">
+		<xs:annotation>
+			<xs:documentation>Description of the service information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the company executing the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransportModeCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the transport mode of a service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopList">
+				<xs:annotation>
+					<xs:documentation>List of stops of the service.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Stop" type="ServiceInfoStopType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Stop of a service.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ServiceType" type="ServiceInfoKind" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfoServiceJitType">
+		<xs:annotation>
+			<xs:documentation>Description of the service information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Id that is also used bu rti and in the rtimonitor.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SourceCodeLastChange" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code for source of last change.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SeqString" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>String indicating the version reference.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CompanyCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the company executing the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransportModeCode" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the transport mode of a service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopList">
+				<xs:annotation>
+					<xs:documentation>List of stops of the service.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Stop" type="ServiceInfoStopType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Stop of a service.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="ServiceType" type="ServiceInfoKind" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfoStopType">
+		<xs:annotation>
+			<xs:documentation>Description of the stop information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StopCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of a public transport stop (station).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company at the departure stop.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Arrival" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Planned arrival time of the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalTimeDelay" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Delay of the service at arrival.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Departure" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Planned departure time of the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DepartureTimeDelay" type="xs:duration" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Delay of the service at departure.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalPlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Arrival Platform of the service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualArrivalPlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Actual Arrival Platform of the service</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DeparturePlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Departure Platform of the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ActualDeparturePlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Actual Departure Platform of the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="StopType" type="ServiceInfoStopKind" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfoReturn">
+		<xs:annotation>
+			<xs:documentation>Return value</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="ReturnValueKind">
+				<xs:annotation>
+					<xs:documentation>Return code enumeration</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Return description. Will be logged when not Return-OK.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlatFormInfoList">
+		<xs:annotation>
+			<xs:documentation>List of services with changed platform information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PlatformInfo" type="PlatformInfoType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Service with changed platform information</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Initial" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="PlatformInfoType">
+		<xs:annotation>
+			<xs:documentation>Description of platform information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the company executing the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StopList">
+				<xs:annotation>
+					<xs:documentation>List of stops with platform changes</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Stop" type="PlatformInfoStopType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Stop with platform change</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlatformInfoStopType">
+		<xs:annotation>
+			<xs:documentation>Description of the stop information</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StopCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of a public transport stop (station).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ArrivalPlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Real time arrival platform of the service on the stop.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DeparturePlatform" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Real time departure platform of the service on the stop.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Departure" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Planned departure time of the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlatformInfoReturn">
+		<xs:annotation>
+			<xs:documentation>Return value</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="ReturnValueKind">
+				<xs:annotation>
+					<xs:documentation>Return code enumeration.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Return description. Will be logged when not Return-OK.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceInputType">
+		<xs:annotation>
+			<xs:documentation>Input for GetServiceInfo</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the company executing the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Date and time to select de designated service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CallerId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id for statistics.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="SearchType" type="SearchTypeKind" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="RtiMonitorInputType">
+		<xs:annotation>
+			<xs:documentation>Input for RtiMonitor</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CallerId" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Id for statistics.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MsgId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id for message-identification; it is returned in the answer</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ServiceInputJitType">
+		<xs:annotation>
+			<xs:documentation>Input for GetServiceInfoJit</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CompanyCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code or abbreviation of the company executing the service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ServiceCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Unique identification of a service within a company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateTime" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Date and time to select de designated service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CallerId" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Id for statistics.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="SearchType" type="SearchTypeKind" use="optional"/>
+	</xs:complexType>
+</xs:schema>
